@@ -1,7 +1,7 @@
 <div>
     <h2>Nowa notatka</h2>
     <?php if($params['created']) : ?>
-      <div><?php echo 'Tytuł: ' . $params['text'] ?></div>
+      <div><?php echo 'Tytuł: ' . $params['title'] ?></div>
       <div><?php echo 'Treść: ' . $params['description'] ?></div>
     <?php else : ?>
     <div>
