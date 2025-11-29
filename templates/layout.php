@@ -10,7 +10,7 @@
     <body class = "body">
         <div class="wrapper">
             <div class="header">
-                <h1><i class="far fa-clipboard"></i>Moje notatki</h1>
+                <h1><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>Moje notatki</h1>
             </div>
             
             <div class="container">
