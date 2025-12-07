@@ -1,8 +1,12 @@
 <?php
 declare(strict_types=1);
 namespace App;
+
+use App\Exception\ConfigurationException;
+
 require_once("View.php");
 require_once("Database.php");
+require_once("Exception\ConfigurationException.php");
 
 class Controller {
     private const DEFAULT_ACTION = 'list';
@@ -18,6 +22,10 @@ class Controller {
 
     public function __construct(array $request)
     {
+        if(empty(self::$configuration['db']))
+        {
+            throw new ConfigurationException();
+        }
         $db = new Database(self::$configuration['db']);
 
         $this->request = $request;
