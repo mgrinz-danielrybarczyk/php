@@ -27,6 +27,16 @@ class Database
         }
     }
 
+    public function getNotes(): array
+    {
+        try {
+            $query = "SELECT id, title, created FROM notes";
+            return $this->conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            throw new StorageException("Nie udało się pobrać danych", 400, $e);
+        }
+    }
+
     public function createNote(array $data): void
     {
         $title = $this->conn->quote($data['title']);
@@ -36,10 +46,10 @@ class Database
             $query = "INSERT INTO notes(title,description,created) VALUES($title,$description,$created)";
             $result = $this->conn->exec($query);
             dump($result);
-    } catch (Throwable $e) {
-        dump($e);
-        exit;
-    }
+        } catch (Throwable $e) {
+            dump($e);
+            exit;
+        }
     }
 
     private function createConnection($config): void
@@ -57,8 +67,7 @@ class Database
 
     private function validateConfig(array $config): void
     {
-        if(empty($config['database']) || empty($config['host']) || empty($config['user']) || empty($config['password']))
-        {
+        if (empty($config['database']) || empty($config['host']) || empty($config['user']) || empty($config['password'])) {
             throw new ConfigurationException('Storage configuration error');
         }
     }
