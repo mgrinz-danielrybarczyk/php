@@ -11,6 +11,8 @@ require_once("Exception\ConfigurationException.php");
 class Controller {
     private const DEFAULT_ACTION = 'list';
 
+    private Database $database;
+
     private array $request;
     private View $view;
     private static array $configuration = [];
@@ -26,7 +28,7 @@ class Controller {
         {
             throw new ConfigurationException();
         }
-        $db = new Database(self::$configuration['db']);
+        $this->database = new Database(self::$configuration['db']);
 
         $this->request = $request;
         $this->view = new View();
@@ -34,6 +36,7 @@ class Controller {
 
     public function run(): void
     {
+
         $created = false;
 
         $data = $this->getRequestPost();
@@ -45,11 +48,9 @@ class Controller {
             $page = 'create';
                 if (!empty($data))
                 {
-                    $viewParams = [
-                        'title' => $data['title'],
-                        'description' => $data['description']
-                    ];
                     $created = true;
+                    $this->database->createNote($data);
+                    header('Location: /');
                 }
             $viewParams['created'] = $created;
             break;
