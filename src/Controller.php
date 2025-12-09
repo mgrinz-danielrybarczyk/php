@@ -3,10 +3,12 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exception\ConfigurationException;
+use App\Exception\NotFoundException;
 
 require_once("View.php");
 require_once("Database.php");
 require_once("Exception\ConfigurationException.php");
+require_once("Exception\NotFoundException.php");
 
 class Controller {
     private const DEFAULT_ACTION = 'list';
@@ -54,18 +56,35 @@ class Controller {
                 }
             break;
             case 'show':
+            $page = 'show';
+
+            $data = $this->getRequestGet();
+            $noteId = (int) ($data['id'] ?? null);
+
+            if (!$noteId)
+            {
+                header('Location: /?error=missingNoteId');
+            }
+            
+            try {        
+                $note = $this->database->getNote($noteId);
+            } catch (NotFoundException $e) {
+                header('Location: /?error=noteNotFound');
+            }
+            
             $viewParams = [
-                'title' => 'Moja notatka',
-                'description' => 'Opis'
+                'note' => $note
             ];
             break;
+
             default:
             $page = 'list';
             $data = $this->getRequestGet();
 
             $viewParams = [
                 'before' => $data['before'] ?? null,
-                'notes' => $this->database->getNotes()
+                'notes' => $this->database->getNotes(),
+                'error' => $data['error'] ?? null
             ];
             break;
         }
