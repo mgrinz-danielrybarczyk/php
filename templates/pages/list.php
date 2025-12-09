@@ -20,6 +20,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Tytuł</th>
+                        <th>Data</th>
                         <th>Opcje</th>
                     </tr>
                 </thead>
@@ -28,7 +29,16 @@
 
         <div class="tbl-content">
             <table cellpadding="0" cellspacing="0" border="0">
-
+                <?php foreach($params['notes'] ?? [] as $note) : ?>
+                    <tr>
+                        
+                        <td><?php echo (int) $note['id'] ?></td>
+                        <td><?php echo htmlentities($note['title']) ?></td>
+                        <td><?php echo htmlentities($note['created']) ?></td>
+                        <td>Options</td>
+                        
+                    </tr>
+                    <?php endforeach; ?>     
             </table>
         </div>
     </section>

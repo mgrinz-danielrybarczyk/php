@@ -63,13 +63,13 @@ class Controller {
             $page = 'list';
             $data = $this->getRequestGet();
 
-            $notes = $this->database->getNotes();
-            dump($notes);
-
-            $viewParams['before'] = $data['before'] ?? null;
+            $viewParams = [
+                'before' => $data['before'] ?? null,
+                'notes' => $this->database->getNotes()
+            ];
             break;
         }
-        $this->view->render($page, $viewParams);
+        $this->view->render($page, $viewParams ?? []);
     }
 
     private function action():string
