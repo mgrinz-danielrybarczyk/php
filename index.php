@@ -7,16 +7,15 @@ namespace App;
 use App\Exception\AppException;
 use App\Exception\ConfigurationException;
 use Throwable;
+use App\Request;
 
 require_once("src/Utils/debug.php");
 require_once("src/Controller.php");
+require_once("src/Request.php");
 
 $configuration = require_once("config/config.php");
 
-$request = [
-    'get' => $_GET,
-    'post' => $_POST
-];
+$request = new Request($_GET, $_POST);
 
 try {
     Controller::initConfiguration($configuration);
