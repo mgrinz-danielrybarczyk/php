@@ -10,7 +10,7 @@ use Throwable;
 use App\Request;
 
 require_once("src/Utils/debug.php");
-require_once("src/Controller.php");
+require_once("src/NoteController.php");
 require_once("src/Request.php");
 
 $configuration = require_once("config/config.php");
@@ -18,8 +18,8 @@ $configuration = require_once("config/config.php");
 $request = new Request($_GET, $_POST);
 
 try {
-    Controller::initConfiguration($configuration);
-    (new Controller($request))->run();
+    AbstractController::initConfiguration($configuration);
+    (new NoteController($request))->run();
 } catch (ConfigurationException $e) {
     dump($e);
     echo '<h1>Wystąpił problem z konfiguracją.</br>Skontaktuj się z administratorem: daniel@admin.pl</h1';
