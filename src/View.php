@@ -20,7 +20,7 @@ class View
       if (is_array($param)) {
         $clearParams[$key] = $this->escape($param);
       } else {
-            if(!is_string($param)) {
+            if(!is_string($param) || !$param) {
                 $clearParams[$key] = $param;
             } else {
                 $clearParams[$key] = htmlentities((string) $param);
