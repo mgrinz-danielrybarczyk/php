@@ -4,37 +4,35 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Exception\ConfigurationException;
-
 require_once("Exception\ConfigurationException.php");
+require_once("Database.php");
+require_once("View.php");
+
+use App\Exception\ConfigurationException;
 
 abstract class AbstractController
 {
+    private static array $configuration = [];
     protected const DEFAULT_ACTION = 'list';
     protected Database $database;
     protected Request $request;
     protected View $view;
-    private static array $configuration = [];
-
-    public function __construct(Request $request)
-    {
-        if(empty(self::$configuration['db']))
-        {
-            throw new ConfigurationException();
-        }
-        $this->database = new Database(self::$configuration['db']);
-
-        $this->request = $request;
-        $this->view = new View();
-    }
 
     public static function initConfiguration(array $configuration): void
     {
         self::$configuration = $configuration;
     }
-    protected function action(): string
+
+    public function __construct(Request $request)
     {
-        return $this->request->getParam('action', self::DEFAULT_ACTION);
+        if(empty(self::$configuration['db']))
+        {
+            throw new ConfigurationException('Configuration error');
+        }
+        $this->database = new Database(self::$configuration['db']);
+
+        $this->request = $request;
+        $this->view = new View();
     }
 
     public function run(): void
@@ -45,5 +43,10 @@ abstract class AbstractController
             $action = self::DEFAULT_ACTION . 'Action';
         }
         $this->$action();
+    }
+
+    private function action(): string
+    {
+        return $this->request->getParam('action', self::DEFAULT_ACTION);
     }
 }
