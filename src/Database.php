@@ -55,8 +55,20 @@ class Database
             $result = $this->conn->exec($query);
             dump($result);
         } catch (Throwable $e) {
-            dump($e);
-            exit;
+            throw new StorageException("Nie udało się utworzyć nowej notatki",400, $e);
+        }
+    }
+
+    public function editNote(int $id, array $data): void
+    {
+        $title = $this->conn->quote($data['title']);
+        $description = $this->conn->quote($data['description']);
+        try {
+            $query = "UPDATE notes SET title = $title, description = $description WHERE id = $id";
+            $result = $this->conn->exec($query);
+            dump(data: $result);
+        } catch (Throwable $e) {
+            throw new StorageException("Nie udało się zaktualizować notatki",400, $e);
         }
     }
 

@@ -26,6 +26,9 @@
                         case 'created':
                             echo 'Utworzono nową Notatkę!';
                             break;
+                        case 'edited':
+                            echo 'Zaktualizowano notatkę!';
+                            break;
                     }
                 }
             ?>
