@@ -17,7 +17,7 @@ use App\Controller\NoteController;
 require_once("src/Utils/debug.php");
 
 $configuration = require_once("config/config.php");
-$request = new Request($_GET, $_POST, server: $_SERVER);
+$request = new Request($_GET, $_POST,$_SERVER);
 
 try {
     AbstractController::initConfiguration($configuration);
