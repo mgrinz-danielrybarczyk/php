@@ -34,10 +34,21 @@ class Database
         return $note;
     }
 
-    public function getNotes(): array
+    public function getNotes(string $sortBy, string $sortOrder): array
     {
+        if(!in_array($sortBy, ['title', 'created'])) {
+            $sortBy = 'title';
+        }
+
+        if(!in_array($sortOrder, ['asc', 'desc'])) {
+            $sortOrder = 'desc';
+        }
+
         try {
-            $query = "SELECT id, title, created FROM notes";
+            $query = "SELECT id, title, created
+            FROM notes
+            ORDER BY $sortBy $sortOrder
+            ";
             $notes = $this->conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
             return $notes;
         } catch (Throwable $e) {
