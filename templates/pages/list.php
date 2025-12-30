@@ -21,18 +21,11 @@
             <?php
                 if(!empty($params['before']))
                 {
-                    switch($params['before'])
-                    {
-                        case 'created':
-                            echo 'Utworzono nową Notatkę!';
-                            break;
-                        case 'edited':
-                            echo 'Zaktualizowano notatkę!';
-                            break;
-                        case 'deleted':
-                            echo 'Usunięto notatkę!';
-                            break;
-                    }
+                    echo match($params['before']) {
+                        'created' => 'Utworzono nową Notatkę!',
+                        'edited' => 'Zaktualizowano notatkę!',
+                        'deleted' => 'Usunięto notatkę!',
+                    };
                 }
             ?>
         </div>
