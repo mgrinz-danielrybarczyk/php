@@ -44,6 +44,7 @@
         $page = $params['page'] ?? [];
         $size = $page['size'] ?? 10;
         $number = $page['number'] ?? 1;
+        $pages = $page['pages'] ?? 1;
 
         ?>
         <div>
@@ -98,5 +99,14 @@
                     <?php endforeach; ?>     
             </table>
         </div>
+        <ul class="pagination">
+        <?php for($i = 1; $i <= $pages; $i++): ?>
+            <li>
+                <a href="/?sortby=<?php echo $by; ?>&sortorder=<?php echo $order; ?>&pagesize=<?php echo $size; ?>&page=<?php echo $i ?>">
+                    <button><?php echo $i; ?></button>
+                </a>
+            </li>
+        <?php endfor ?>
+        </ul>
     </section>
 </div>

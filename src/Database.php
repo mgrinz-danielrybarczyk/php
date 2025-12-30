@@ -59,6 +59,20 @@ class Database
         }
     }
 
+    public function getCount(): int
+    {
+        try {
+            $query = "SELECT count(*) AS cn FROM notes";
+            $result = $this->conn->query($query)->fetch(PDO::FETCH_ASSOC);
+            if ($result === false) {
+                throw new StorageException('Błąd przy próbie pobranie ilości notatek', 400);
+            }
+            return (int) $result['cn'];
+        } catch (Throwable $e) {
+            throw new StorageException("Nie udało się pobrać informacji o liczbie notatek", 400, $e);
+        }
+    }
+
     public function createNote(array $data): void
     {
         $title = $this->conn->quote($data['title']);
