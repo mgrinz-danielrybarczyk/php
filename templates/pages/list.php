@@ -4,15 +4,10 @@
         <?php if(!empty($params['error'])) : ?>
             <div class="message">
                 <?php
-                    switch($params['error']) 
-                    {
-                        case 'noteNotFound':
-                            echo "Notatka nie została znaleziona";
-                            break;
-                        case 'missingNoteId':
-                            echo "Niepoprawny identyfikator notatki";
-                            break;
-                    }
+                    echo match($params["error"]) {
+                        'noteNotFound' => "Notatka nie została znaleziona",
+                        'missingNoteId' => "Niepoprawny identyfikator notatki",
+                    };
                 ?>
             </div>
         <?php endif; ?>
