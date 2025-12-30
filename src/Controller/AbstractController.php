@@ -16,7 +16,6 @@ abstract class AbstractController
     private static array $configuration = [];
     protected const DEFAULT_ACTION = 'list';
     protected NoteModel $noteModel;
-    protected Request $request;
     protected View $view;
 
     public static function initConfiguration(array $configuration): void
@@ -24,15 +23,13 @@ abstract class AbstractController
         self::$configuration = $configuration;
     }
 
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
         if(empty(self::$configuration['db']))
         {
             throw new ConfigurationException('Configuration error');
         }
         $this->noteModel = new NoteModel(self::$configuration['db']);
-
-        $this->request = $request;
         $this->view = new View();
     }
 
