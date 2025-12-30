@@ -34,8 +34,10 @@ class Database
         return $note;
     }
 
-    public function getNotes(string $sortBy, string $sortOrder): array
+    public function getNotes(int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
     {
+        $limit = $pageSize;
+        $offset = ($pageNumber -1) * $pageSize;
         if(!in_array($sortBy, ['title', 'created'])) {
             $sortBy = 'title';
         }
@@ -48,6 +50,7 @@ class Database
             $query = "SELECT id, title, created
             FROM notes
             ORDER BY $sortBy $sortOrder
+            LIMIT $offset, $limit
             ";
             $notes = $this->conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
             return $notes;
