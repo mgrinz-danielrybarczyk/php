@@ -17,19 +17,12 @@ class View
     $clearParams = [];
 
     foreach ($params as $key => $param) {
-      switch(true) {
-        case is_array($param):
-          $clearParams[$key] = $this->escape($param);
-          break;
-        case is_int($param):
-          $clearParams[$key] = $param;
-          break;
-        case $param:
-          $clearParams[$key] = htmlentities($param);
-        default:
-          $clearParams[$key] = $param;
-          break;
-      }
+      $clearParams[$key] = match(true) {
+        is_array($param) => $this->escape($param),
+        is_int($param) => $param,
+        (bool) $param => htmlentities($param),
+        default => $param,
+      };
     }
     return $clearParams;
   }
