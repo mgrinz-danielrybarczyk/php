@@ -35,7 +35,7 @@ class NoteController extends AbstractController
         $pageNumber = (int) $this->request->getParam('page',1);
         $pageSize = (int) $this->request->getParam('pagesize',self::PAGE_SIZE);
 
-        if(!in_array($pageNumber,[1,5,10,25]))
+        if(!in_array($pageSize,[1,5,10,25]))
         {
             $pageSize = self::PAGE_SIZE;
         }

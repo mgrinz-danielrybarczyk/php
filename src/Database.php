@@ -26,8 +26,12 @@ class Database
 
     public function getNote(int $id): array
     {
-                $query = "SELECT * FROM notes WHERE id = $id";
-                $note = $this->conn->query($query)->fetch(PDO::FETCH_ASSOC);
+        try {
+            $query = "SELECT * FROM notes WHERE id = $id";
+            $note = $this->conn->query($query)->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            throw new StorageException('Nie udało się pobrać notatki', 400, $e);
+        }
         if (!$note) {
             throw new NotFoundException("Notatka o id: $id nie istnieje");
         }
@@ -36,17 +40,17 @@ class Database
 
     public function getNotes(int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
     {
-        $limit = $pageSize;
-        $offset = ($pageNumber -1) * $pageSize;
-        if(!in_array($sortBy, ['title', 'created'])) {
-            $sortBy = 'title';
-        }
-
-        if(!in_array($sortOrder, ['asc', 'desc'])) {
-            $sortOrder = 'desc';
-        }
-
         try {
+            $limit = $pageSize;
+            $offset = ($pageNumber -1) * $pageSize;
+            if(!in_array($sortBy, ['title', 'created'])) {
+                $sortBy = 'title';
+            }
+
+            if(!in_array($sortOrder, ['asc', 'desc'])) {
+                $sortOrder = 'desc';
+            }
+
             $query = "SELECT id, title, created
             FROM notes
             ORDER BY $sortBy $sortOrder
@@ -55,7 +59,7 @@ class Database
             $notes = $this->conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
             return $notes;
         } catch (Throwable $e) {
-            throw new StorageException("Nie udało się pobrać danych", 400, $e);
+            throw new StorageException("Nie udało się pobrać danych o notatkach", 400, $e);
         }
     }
 
@@ -75,10 +79,11 @@ class Database
 
     public function createNote(array $data): void
     {
-        $title = $this->conn->quote($data['title']);
-        $description = $this->conn->quote($data['description']);
-        $created = $this->conn->quote(date('Y-m-d H:i:s'));
         try {
+            $title = $this->conn->quote($data['title']);
+            $description = $this->conn->quote($data['description']);
+            $created = $this->conn->quote(date('Y-m-d H:i:s'));
+        
             $query = "INSERT INTO notes(title,description,created) VALUES($title,$description,$created)";
             $result = $this->conn->exec($query);
             dump($result);
@@ -89,9 +94,10 @@ class Database
 
     public function editNote(int $id, array $data): void
     {
-        $title = $this->conn->quote($data['title']);
-        $description = $this->conn->quote($data['description']);
         try {
+            $title = $this->conn->quote($data['title']);
+            $description = $this->conn->quote($data['description']);
+        
             $query = "UPDATE notes SET title = $title, description = $description WHERE id = $id";
             $result = $this->conn->exec($query);
             dump($result);
